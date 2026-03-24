@@ -9,7 +9,7 @@ const PROVIDER_CONFIG: Record<AIProvider, { baseURL: string; model: string }> = 
   },
   openrouter: {
     baseURL: 'https://openrouter.ai/api/v1',
-    model: 'openai/gpt-4o',
+    model: 'minimax/minimax-m2.5',
   },
 }
 
