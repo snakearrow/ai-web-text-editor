@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* TipTap editor prose styles */
+.tiptap {
+  outline: none;
+  min-height: 100%;
+  padding: 2rem;
+}
+
+.tiptap h1 { @apply text-3xl font-bold mb-4 mt-6; }
+.tiptap h2 { @apply text-2xl font-bold mb-3 mt-5; }
+.tiptap h3 { @apply text-xl font-semibold mb-2 mt-4; }
+.tiptap h4 { @apply text-lg font-semibold mb-2 mt-3; }
+.tiptap p  { @apply mb-3 leading-relaxed; }
+
+.tiptap figure {
+  @apply my-4 flex flex-col items-center;
+}
+.tiptap figcaption {
+  @apply text-sm text-gray-500 mt-1 italic;
+}
+
+/* Placeholder */
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply text-gray-400 pointer-events-none float-left h-0;
+}
