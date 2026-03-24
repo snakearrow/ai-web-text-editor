@@ -1,0 +1,79 @@
+{
+  "type": "template",
+  "name": "Product Guide",
+  "description": "A product guide template with overview, features, and usage instructions",
+  "version": "1.0",
+  "dataSources": [
+    {
+      "id": "product_data",
+      "name": "Product Information",
+      "pythonInterface": "data_sources::fetch_product_data",
+      "parameters": {
+        "product_id": "example_product"
+      }
+    }
+  ],
+  "chapters": [
+    {
+      "id": "overview",
+      "title": "Product Overview",
+      "dataSourceId": "product_data",
+      "prompt": "Write a concise overview of the product, highlighting its key value proposition and target users.",
+      "status": "pending"
+    },
+    {
+      "id": "features",
+      "title": "Key Features",
+      "dataSourceId": "product_data",
+      "prompt": "List and explain the key features of the product in an easy-to-understand format with clear descriptions.",
+      "status": "pending"
+    },
+    {
+      "id": "usage",
+      "title": "Getting Started",
+      "dataSourceId": "product_data",
+      "prompt": "Write step-by-step instructions for getting started with the product, including setup and first use.",
+      "status": "pending"
+    }
+  ],
+  "document": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": { "level": 1 },
+        "content": [{ "type": "text", "text": "Product Guide" }]
+      },
+      {
+        "type": "heading",
+        "attrs": { "level": 2, "chapterId": "overview" },
+        "content": [{ "type": "text", "text": "Overview" }]
+      },
+      {
+        "type": "paragraph",
+        "attrs": { "chapterId": "overview" },
+        "content": [{ "type": "text", "text": "[Generate overview]" }]
+      },
+      {
+        "type": "heading",
+        "attrs": { "level": 2, "chapterId": "features" },
+        "content": [{ "type": "text", "text": "Key Features" }]
+      },
+      {
+        "type": "paragraph",
+        "attrs": { "chapterId": "features" },
+        "content": [{ "type": "text", "text": "[Generate features]" }]
+      },
+      {
+        "type": "heading",
+        "attrs": { "level": 2, "chapterId": "usage" },
+        "content": [{ "type": "text", "text": "Getting Started" }]
+      },
+      {
+        "type": "paragraph",
+        "attrs": { "chapterId": "usage" },
+        "content": [{ "type": "text", "text": "[Generate usage instructions]" }]
+      }
+    ]
+  }
+}

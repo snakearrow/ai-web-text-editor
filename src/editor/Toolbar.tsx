@@ -1,6 +1,7 @@
 import { type Editor } from '@tiptap/react'
 import { Bars3Icon, Bars3BottomLeftIcon, Bars3BottomRightIcon, Bars3CenterLeftIcon, H1Icon, H2Icon, H3Icon, ArrowUturnLeftIcon, ArrowUturnRightIcon } from '@heroicons/react/20/solid'
 import { exportToDocx } from '../export/docx'
+import { TemplateSelector } from '../templates/TemplateSelector'
 
 interface Props {
   editor: Editor
@@ -97,6 +98,11 @@ export function Toolbar({ editor, onSettingsClick }: Props) {
       <button onClick={insertImage} className={btn(false)} title="Insert image">
         🖼
       </button>
+
+      <div className="w-px h-5 bg-gray-300 mx-1" />
+
+      {/* Template Selector */}
+      <TemplateSelector editor={editor} />
 
       {/* Export & Settings */}
       <div className="ml-auto flex items-center gap-2">

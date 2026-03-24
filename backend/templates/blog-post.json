@@ -1,0 +1,79 @@
+{
+  "type": "template",
+  "name": "Blog Post",
+  "description": "A simple blog post template with introduction and conclusion",
+  "version": "1.0",
+  "dataSources": [
+    {
+      "id": "blog_outline",
+      "name": "Blog Outline",
+      "pythonInterface": "data_sources::fetch_blog_outline",
+      "parameters": {
+        "topic": "Artificial Intelligence"
+      }
+    }
+  ],
+  "chapters": [
+    {
+      "id": "intro",
+      "title": "Introduction",
+      "dataSourceId": "blog_outline",
+      "prompt": "Write an engaging introduction for a blog post about the given topic. Keep it under 200 words.",
+      "status": "pending"
+    },
+    {
+      "id": "body",
+      "title": "Main Content",
+      "dataSourceId": "blog_outline",
+      "prompt": "Write the main body section of the blog post based on the outline provided. Make it informative and well-structured with clear sections.",
+      "status": "pending"
+    },
+    {
+      "id": "conclusion",
+      "title": "Conclusion",
+      "dataSourceId": "blog_outline",
+      "prompt": "Write a compelling conclusion that summarizes the main points and leaves the reader with something to think about.",
+      "status": "pending"
+    }
+  ],
+  "document": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": { "level": 1 },
+        "content": [{ "type": "text", "text": "Blog Post" }]
+      },
+      {
+        "type": "heading",
+        "attrs": { "level": 2, "chapterId": "intro" },
+        "content": [{ "type": "text", "text": "Introduction" }]
+      },
+      {
+        "type": "paragraph",
+        "attrs": { "chapterId": "intro" },
+        "content": [{ "type": "text", "text": "[Generate introduction]" }]
+      },
+      {
+        "type": "heading",
+        "attrs": { "level": 2, "chapterId": "body" },
+        "content": [{ "type": "text", "text": "Main Content" }]
+      },
+      {
+        "type": "paragraph",
+        "attrs": { "chapterId": "body" },
+        "content": [{ "type": "text", "text": "[Generate main content]" }]
+      },
+      {
+        "type": "heading",
+        "attrs": { "level": 2, "chapterId": "conclusion" },
+        "content": [{ "type": "text", "text": "Conclusion" }]
+      },
+      {
+        "type": "paragraph",
+        "attrs": { "chapterId": "conclusion" },
+        "content": [{ "type": "text", "text": "[Generate conclusion]" }]
+      }
+    ]
+  }
+}

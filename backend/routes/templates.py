@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
-from typing import Dict
+from typing import Dict, List
 import json
+from pathlib import Path
 
 from schemas import Template, GenerateChapterRequest, GenerateChapterResponse
 from data_sources import load_data
@@ -11,6 +12,54 @@ router = APIRouter()
 
 # In-memory template storage (for now)
 templates_store: Dict[str, Template] = {}
+
+# Path to template files
+TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
+
+@router.get("/templates")
+async def list_templates() -> List[Dict]:
+    """List all available template files"""
+    if not TEMPLATES_DIR.exists():
+        return []
+
+    templates = []
+    for template_file in TEMPLATES_DIR.glob("*.json"):
+        try:
+            with open(template_file) as f:
+                template_data = json.load(f)
+                templates.append({
+                    "id": template_file.stem,
+                    "name": template_data.get("name", template_file.stem),
+                    "description": template_data.get("description", ""),
+                    "filename": template_file.name,
+                })
+        except Exception as e:
+            # Skip invalid templates
+            pass
+
+    return templates
+
+@router.get("/templates/{template_id}/load")
+async def load_template_from_file(template_id: str) -> Template:
+    """Load a template from the filesystem"""
+    template_file = TEMPLATES_DIR / f"{template_id}.json"
+
+    if not template_file.exists():
+        raise HTTPException(status_code=404, detail="Template file not found")
+
+    try:
+        with open(template_file) as f:
+            template_data = json.load(f)
+            template = Template(**template_data)
+
+            # Store in memory for later use
+            templates_store[template_id] = template
+
+            return template
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid template JSON")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to load template: {str(e)}")
 
 @router.post("/templates/load")
 async def load_template(template: Template) -> Dict:
