@@ -17,6 +17,7 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [editor, setEditor] = useState<TipTapEditor | null>(null)
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null)
+  const [currentTemplateId, setCurrentTemplateId] = useState<string | null>(null)
 
   // Show settings modal on first visit (no API key set)
   const hasApiKey = !!sessionStorage.getItem('ai_api_key')
@@ -32,7 +33,16 @@ export default function App() {
       />
 
       {/* Outline sidebar */}
-      {editor && <Outline editor={editor} />}
+      {editor && (
+        <Outline
+          editor={editor}
+          currentTemplateId={currentTemplateId}
+          onGenerateChapter={(chapterId) => {
+            console.log('Generate chapter:', chapterId)
+            // TODO: implement chapter generation
+          }}
+        />
+      )}
 
       {/* Main editor area */}
       <div className="flex flex-col flex-1 min-w-0">
@@ -43,6 +53,7 @@ export default function App() {
           }}
           onEditorReady={setEditor}
           onSettingsClick={() => setSettingsOpen(true)}
+          onTemplateLoaded={setCurrentTemplateId}
         />
       </div>
 

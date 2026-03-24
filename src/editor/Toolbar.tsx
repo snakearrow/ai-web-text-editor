@@ -6,6 +6,7 @@ import { TemplateSelector } from '../templates/TemplateSelector'
 interface Props {
   editor: Editor
   onSettingsClick: () => void
+  onTemplateLoaded?: (templateId: string) => void
 }
 
 const btn = (active: boolean) =>
@@ -15,7 +16,7 @@ const btn = (active: boolean) =>
       : 'text-gray-700 hover:bg-gray-200'
   }`
 
-export function Toolbar({ editor, onSettingsClick }: Props) {
+export function Toolbar({ editor, onSettingsClick, onTemplateLoaded }: Props) {
   const insertImage = () => {
     const input = document.createElement('input')
     input.type = 'file'
@@ -102,7 +103,7 @@ export function Toolbar({ editor, onSettingsClick }: Props) {
       <div className="w-px h-5 bg-gray-300 mx-1" />
 
       {/* Template Selector */}
-      <TemplateSelector editor={editor} />
+      <TemplateSelector editor={editor} onTemplateLoaded={onTemplateLoaded} />
 
       {/* Export & Settings */}
       <div className="ml-auto flex items-center gap-2">

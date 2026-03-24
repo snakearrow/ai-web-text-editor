@@ -4,6 +4,7 @@ export interface HeadingNode {
   level: number
   text: string
   pos: number
+  chapterId?: string
 }
 
 export interface TreeNode extends HeadingNode {
@@ -19,6 +20,7 @@ export function extractHeadings(doc: ProseMirrorNode): HeadingNode[] {
         level: node.attrs.level as number,
         text: node.textContent,
         pos,
+        chapterId: node.attrs.chapterId as string | undefined,
       })
     }
   })

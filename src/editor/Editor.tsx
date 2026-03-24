@@ -1,5 +1,6 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import Heading from '@tiptap/extension-heading'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -14,9 +15,10 @@ interface Props {
   onAIAction: (action: AIAction, selectedText: string, editor: TipTapEditor) => void
   onEditorReady?: (editor: TipTapEditor) => void
   onSettingsClick?: () => void
+  onTemplateLoaded?: (templateId: string) => void
 }
 
-export function Editor({ onAIAction, onEditorReady, onSettingsClick }: Props) {
+export function Editor({ onAIAction, onEditorReady, onSettingsClick, onTemplateLoaded }: Props) {
   const [contextMenu, setContextMenu] = useState<{
     x: number
     y: number
@@ -27,7 +29,24 @@ export function Editor({ onAIAction, onEditorReady, onSettingsClick }: Props) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ Heading: false }),
+      Heading.configure({
+        levels: [1, 2, 3],
+      }).extend({
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            chapterId: {
+              default: null,
+              parseHTML: element => element.getAttribute('data-chapter-id'),
+              renderHTML: attributes => {
+                if (!attributes.chapterId) return {}
+                return { 'data-chapter-id': attributes.chapterId }
+              },
+            },
+          }
+        },
+      }),
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({ placeholder: 'Start writing your report…' }),
@@ -59,7 +78,7 @@ export function Editor({ onAIAction, onEditorReady, onSettingsClick }: Props) {
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <Toolbar editor={editor} onSettingsClick={onSettingsClick || (() => {})} />
+      <Toolbar editor={editor} onSettingsClick={onSettingsClick || (() => {})} onTemplateLoaded={onTemplateLoaded} />
 
       <div
         ref={editorRef}

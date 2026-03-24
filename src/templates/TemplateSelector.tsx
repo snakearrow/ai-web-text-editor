@@ -10,11 +10,12 @@ interface TemplateInfo {
 
 interface Props {
   editor: Editor
+  onTemplateLoaded?: (templateId: string) => void
 }
 
 const BACKEND_URL = 'http://localhost:8000/api'
 
-export function TemplateSelector({ editor }: Props) {
+export function TemplateSelector({ editor, onTemplateLoaded }: Props) {
   const [templates, setTemplates] = useState<TemplateInfo[]>([])
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
@@ -43,6 +44,10 @@ export function TemplateSelector({ editor }: Props) {
 
       // Load template document into editor, emitUpdate=true so the Outline picks up the changes
       editor.commands.setContent({ type: 'doc', content: template.document.content }, true)
+
+      if (onTemplateLoaded) {
+        onTemplateLoaded(templateId)
+      }
 
       setOpen(false)
     } catch (error) {
