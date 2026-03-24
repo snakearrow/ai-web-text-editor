@@ -3,6 +3,11 @@ import { type Editor } from '@tiptap/react'
 import { streamAIAction, ACTION_LABELS, type AIAction } from '../ai'
 
 interface Props {
+  pendingAction: {
+    action: AIAction
+    selectedText: string
+    editor: Editor
+  } | null
   onClose: () => void
 }
 
@@ -14,32 +19,23 @@ interface Result {
   editor: Editor
 }
 
-export function AISidebar({ onClose }: Props) {
+export function AISidebar({ pendingAction, onClose }: Props) {
   const [result, setResult] = useState<Result | null>(null)
   const outputRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handler = (e: Event) => {
-      const { action, selectedText, editor } = (e as CustomEvent).detail as {
-        action: AIAction
-        selectedText: string
-        editor: Editor
-      }
+    if (!pendingAction) return
 
-      const next: Result = { action, selectedText, output: '', done: false, editor }
-      setResult(next)
+    const next: Result = { ...pendingAction, output: '', done: false }
+    setResult(next)
 
-      streamAIAction(
-        action,
-        selectedText,
-        chunk => setResult(r => r ? { ...r, output: r.output + chunk } : r),
-        ()    => setResult(r => r ? { ...r, done: true } : r),
-      )
-    }
-
-    window.addEventListener('ai:action', handler)
-    return () => window.removeEventListener('ai:action', handler)
-  }, [])
+    streamAIAction(
+      pendingAction.action,
+      pendingAction.selectedText,
+      chunk => setResult(r => r ? { ...r, output: r.output + chunk } : r),
+      ()    => setResult(r => r ? { ...r, done: true } : r),
+    )
+  }, [pendingAction])
 
   // Auto-scroll output
   useEffect(() => {

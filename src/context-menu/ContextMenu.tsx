@@ -8,7 +8,7 @@ interface Props {
   selectedText: string
   editor: Editor
   onClose: () => void
-  onOpenSidebar: () => void
+  onOpenSidebar: (action: AIAction) => void
 }
 
 const ACTIONS = Object.keys(ACTION_LABELS) as AIAction[]
@@ -24,13 +24,8 @@ export function ContextMenu({ x, y, selectedText, editor, onClose, onOpenSidebar
     return () => document.removeEventListener('mousedown', handler)
   }, [onClose])
 
-  const handleAction = async (action: AIAction) => {
-    onClose()
-    onOpenSidebar()
-    // Dispatch event so sidebar can pick up the action + text
-    window.dispatchEvent(new CustomEvent('ai:action', {
-      detail: { action, selectedText, editor },
-    }))
+  const handleAction = (action: AIAction) => {
+    onOpenSidebar(action)
   }
 
   return (

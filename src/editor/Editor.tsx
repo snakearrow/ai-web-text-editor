@@ -8,9 +8,10 @@ import { Toolbar } from './Toolbar'
 import { ContextMenu } from '../context-menu/ContextMenu'
 import { useState, useRef, useEffect } from 'react'
 import { type Editor as TipTapEditor } from '@tiptap/react'
+import { type AIAction } from '../ai'
 
 interface Props {
-  onAIAction: () => void
+  onAIAction: (action: AIAction, selectedText: string, editor: TipTapEditor) => void
   onEditorReady?: (editor: TipTapEditor) => void
   onSettingsClick?: () => void
 }
@@ -78,7 +79,10 @@ export function Editor({ onAIAction, onEditorReady, onSettingsClick }: Props) {
           selectedText={contextMenu.selectedText}
           editor={editor}
           onClose={() => setContextMenu(null)}
-          onOpenSidebar={onAIAction}
+          onOpenSidebar={(action) => {
+            setContextMenu(null)
+            onAIAction(action, contextMenu.selectedText, editor)
+          }}
         />
       )}
     </div>

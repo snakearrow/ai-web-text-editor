@@ -1,5 +1,5 @@
 import { type Editor } from '@tiptap/react'
-import { Bars3Icon, Bars3BottomLeftIcon, Bars3BottomRightIcon, Bars3CenterLeftIcon, H1Icon, H2Icon, H3Icon } from '@heroicons/react/20/solid'
+import { Bars3Icon, Bars3BottomLeftIcon, Bars3BottomRightIcon, Bars3CenterLeftIcon, H1Icon, H2Icon, H3Icon, ArrowUturnLeftIcon, ArrowUturnRightIcon } from '@heroicons/react/20/solid'
 import { exportToDocx } from '../export/docx'
 
 interface Props {
@@ -62,6 +62,16 @@ export function Toolbar({ editor, onSettingsClick }: Props) {
       </button>
       <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={btn(editor.isActive('underline'))}>
         <span className="underline">U</span>
+      </button>
+
+      <div className="w-px h-5 bg-gray-300 mx-1" />
+
+      {/* Undo / Redo */}
+      <button onClick={() => editor.chain().focus().undo().run()} className={btn(false)} title="Undo">
+        <ArrowUturnLeftIcon className="w-4 h-4" />
+      </button>
+      <button onClick={() => editor.chain().focus().redo().run()} className={btn(false)} title="Redo">
+        <ArrowUturnRightIcon className="w-4 h-4" />
       </button>
 
       <div className="w-px h-5 bg-gray-300 mx-1" />
