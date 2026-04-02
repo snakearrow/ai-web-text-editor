@@ -1,6 +1,7 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Heading from '@tiptap/extension-heading'
+import Paragraph from '@tiptap/extension-paragraph'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -14,11 +15,10 @@ import { type AIAction } from '../ai'
 interface Props {
   onAIAction: (action: AIAction, selectedText: string, editor: TipTapEditor) => void
   onEditorReady?: (editor: TipTapEditor) => void
-  onSettingsClick?: () => void
   onTemplateLoaded?: (templateId: string) => void
 }
 
-export function Editor({ onAIAction, onEditorReady, onSettingsClick, onTemplateLoaded }: Props) {
+export function Editor({ onAIAction, onEditorReady, onTemplateLoaded }: Props) {
   const [contextMenu, setContextMenu] = useState<{
     x: number
     y: number
@@ -29,10 +29,25 @@ export function Editor({ onAIAction, onEditorReady, onSettingsClick, onTemplateL
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ Heading: false }),
+      StarterKit.configure({ Heading: false, Paragraph: false }),
       Heading.configure({
         levels: [1, 2, 3],
       }).extend({
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            chapterId: {
+              default: null,
+              parseHTML: element => element.getAttribute('data-chapter-id'),
+              renderHTML: attributes => {
+                if (!attributes.chapterId) return {}
+                return { 'data-chapter-id': attributes.chapterId }
+              },
+            },
+          }
+        },
+      }),
+      Paragraph.extend({
         addAttributes() {
           return {
             ...this.parent?.(),
@@ -78,7 +93,7 @@ export function Editor({ onAIAction, onEditorReady, onSettingsClick, onTemplateL
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <Toolbar editor={editor} onSettingsClick={onSettingsClick || (() => {})} onTemplateLoaded={onTemplateLoaded} />
+      <Toolbar editor={editor} onTemplateLoaded={onTemplateLoaded} />
 
       <div
         ref={editorRef}

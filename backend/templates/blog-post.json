@@ -5,11 +5,11 @@
   "version": "1.0",
   "dataSources": [
     {
-      "id": "blog_outline",
-      "name": "Blog Outline",
-      "pythonInterface": "data_sources::fetch_blog_outline",
+      "id": "webpage",
+      "name": "Webpage Content",
+      "pythonInterface": "data_sources.web::fetch_html_content",
       "parameters": {
-        "topic": "Artificial Intelligence"
+        "url": "https://www.anthropic.com/research/labor-market-impacts"
       }
     }
   ],
@@ -17,22 +17,22 @@
     {
       "id": "intro",
       "title": "Introduction",
-      "dataSourceId": "blog_outline",
-      "prompt": "Write an engaging introduction for a blog post about the given topic. Keep it under 200 words.",
+      "dataSourceId": "webpage",
+      "prompt": "Write an engaging introduction for a blog post based on the provided content. Keep it under 200 words and introduce the main topic.",
       "status": "pending"
     },
     {
       "id": "body",
       "title": "Main Content",
-      "dataSourceId": "blog_outline",
-      "prompt": "Write the main body section of the blog post based on the outline provided. Make it informative and well-structured with clear sections.",
+      "dataSourceId": "webpage",
+      "prompt": "Write the main body section of the blog post based on the provided content. Make it informative and well-structured with clear sections. Expand on the key points and findings.",
       "status": "pending"
     },
     {
       "id": "conclusion",
       "title": "Conclusion",
-      "dataSourceId": "blog_outline",
-      "prompt": "Write a compelling conclusion that summarizes the main points and leaves the reader with something to think about.",
+      "dataSourceId": "webpage",
+      "prompt": "Write a compelling conclusion that summarizes the main points from the provided content and leaves the reader with key takeaways.",
       "status": "pending"
     }
   ],

@@ -30,7 +30,7 @@ async def _generate_openrouter(prompt: str, context: str) -> AsyncGenerator[str,
         base_url="https://openrouter.ai/api/v1"
     )
 
-    system_message = "You are a helpful assistant writing chapters for documents."
+    system_message = "You are a helpful assistant writing chapters for documents. Answer in the same language as the original text."
     user_message = f"{prompt}\n\nContext:\n{context}"
 
     stream = await client.chat.completions.create(
@@ -51,7 +51,7 @@ async def _generate_openai(prompt: str, context: str) -> AsyncGenerator[str, Non
     """Generate using OpenAI API"""
     client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
-    system_message = "You are a helpful assistant writing chapters for documents."
+    system_message = "You are a helpful assistant writing chapters for documents. Answer in the same language as the original text."
     user_message = f"{prompt}\n\nContext:\n{context}"
 
     stream = await client.chat.completions.create(

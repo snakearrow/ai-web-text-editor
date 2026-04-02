@@ -9,6 +9,18 @@ from routes import templates, quick_actions
 async def lifespan(app: FastAPI):
     # Startup
     print("Starting editor backend...")
+
+    # Validate LLM configuration
+    if settings.LLM_PROVIDER == "openai":
+        if not settings.OPENAI_API_KEY:
+            raise ValueError("LLM_PROVIDER is set to 'openai' but OPENAI_API_KEY is not configured in .env")
+    elif settings.LLM_PROVIDER == "openrouter":
+        if not settings.OPENROUTER_API_KEY:
+            raise ValueError("LLM_PROVIDER is set to 'openrouter' but OPENROUTER_API_KEY is not configured in .env")
+    else:
+        raise ValueError(f"Unknown LLM_PROVIDER: {settings.LLM_PROVIDER}. Must be 'openai' or 'openrouter'")
+
+    print(f"✓ Using LLM provider: {settings.LLM_PROVIDER}")
     yield
     # Shutdown
     print("Shutting down editor backend...")

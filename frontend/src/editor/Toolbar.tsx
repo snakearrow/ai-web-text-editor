@@ -5,7 +5,6 @@ import { TemplateSelector } from '../templates/TemplateSelector'
 
 interface Props {
   editor: Editor
-  onSettingsClick: () => void
   onTemplateLoaded?: (templateId: string) => void
 }
 
@@ -16,7 +15,7 @@ const btn = (active: boolean) =>
       : 'text-gray-700 hover:bg-gray-200'
   }`
 
-export function Toolbar({ editor, onSettingsClick, onTemplateLoaded }: Props) {
+export function Toolbar({ editor, onTemplateLoaded }: Props) {
   const insertImage = () => {
     const input = document.createElement('input')
     input.type = 'file'
@@ -105,15 +104,8 @@ export function Toolbar({ editor, onSettingsClick, onTemplateLoaded }: Props) {
       {/* Template Selector */}
       <TemplateSelector editor={editor} onTemplateLoaded={onTemplateLoaded} />
 
-      {/* Export & Settings */}
-      <div className="ml-auto flex items-center gap-2">
-        <button
-          onClick={onSettingsClick}
-          className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition-colors text-lg"
-          title="AI Settings"
-        >
-          ⚙️
-        </button>
+      {/* Export */}
+      <div className="ml-auto">
         <button
           onClick={() => exportToDocx(editor)}
           className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"

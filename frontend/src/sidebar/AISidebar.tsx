@@ -16,6 +16,7 @@ interface Result {
   selectedText: string
   output: string
   done: boolean
+  error?: string
   editor: Editor
 }
 
@@ -34,7 +35,9 @@ export function AISidebar({ pendingAction, onClose }: Props) {
       pendingAction.selectedText,
       chunk => setResult(r => r ? { ...r, output: r.output + chunk } : r),
       ()    => setResult(r => r ? { ...r, done: true } : r),
-    )
+    ).catch(error => {
+      setResult(r => r ? { ...r, done: true, error: error.message } : r)
+    })
   }, [pendingAction])
 
   // Auto-scroll output
@@ -80,16 +83,22 @@ export function AISidebar({ pendingAction, onClose }: Props) {
             <div className="text-xs text-gray-500 bg-gray-50 rounded p-2 line-clamp-3">
               "{result.selectedText}"
             </div>
-            <div className="text-sm text-gray-800 whitespace-pre-wrap">
-              {result.output}
-              {!result.done && <span className="inline-block w-1 h-4 bg-blue-500 animate-pulse ml-0.5 align-text-bottom" />}
-            </div>
+            {result.error ? (
+              <div className="text-sm text-red-600 bg-red-50 rounded p-2">
+                {result.error}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-800 whitespace-pre-wrap">
+                {result.output}
+                {!result.done && <span className="inline-block w-1 h-4 bg-blue-500 animate-pulse ml-0.5 align-text-bottom" />}
+              </div>
+            )}
           </div>
         )}
       </div>
 
       {/* Apply button */}
-      {result?.done && (
+      {result?.done && !result.error && (
         <div className="p-4 border-t border-gray-200">
           <button
             onClick={applyResult}

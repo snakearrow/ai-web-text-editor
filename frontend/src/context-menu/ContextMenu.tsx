@@ -31,19 +31,24 @@ export function ContextMenu({ x, y, selectedText, editor, onClose, onOpenSidebar
   return (
     <div
       ref={ref}
-      className="fixed z-50 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-40"
+      className="fixed z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-2"
       style={{ top: y, left: x }}
     >
-      <div className="px-3 py-1 text-xs text-gray-400 uppercase tracking-wide">AI Actions</div>
-      {ACTIONS.map(action => (
-        <button
-          key={action}
-          onClick={() => handleAction(action)}
-          className="w-full text-left px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-700 transition-colors"
-        >
-          {ACTION_LABELS[action]}
-        </button>
-      ))}
+      <div className="flex gap-0">
+        {ACTIONS.map((action, index) => (
+          <div key={action} className="flex items-center">
+            <button
+              onClick={() => handleAction(action)}
+              className="px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-700 transition-colors whitespace-nowrap"
+            >
+              {ACTION_LABELS[action]}
+            </button>
+            {index < ACTIONS.length - 1 && (
+              <div className="w-px h-5 bg-gray-200" />
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

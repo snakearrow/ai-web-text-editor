@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import { type Editor } from '@tiptap/react'
-import { SparklesIcon } from '@heroicons/react/20/solid'
+import { SparklesIcon, ArrowPathIcon } from '@heroicons/react/20/solid'
 import { extractHeadings, buildHeadingTree, type TreeNode } from './outlineUtils'
 
 interface Props {
   editor: Editor
   currentTemplateId?: string | null
+  generatingChapterId?: string | null
   onGenerateChapter?: (chapterId: string) => void
 }
 
-export function Outline({ editor, currentTemplateId, onGenerateChapter }: Props) {
+export function Outline({ editor, currentTemplateId, generatingChapterId, onGenerateChapter }: Props) {
   const [tree, setTree] = useState<TreeNode[]>([])
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export function Outline({ editor, currentTemplateId, onGenerateChapter }: Props)
       {tree.length === 0 ? (
         <div className="text-xs text-gray-400">No headings yet</div>
       ) : (
-        <TreeRenderer tree={tree} onNavigate={handleNavigate} onGenerateChapter={onGenerateChapter} />
+        <TreeRenderer tree={tree} onNavigate={handleNavigate} generatingChapterId={generatingChapterId} onGenerateChapter={onGenerateChapter} />
       )}
     </div>
   )
@@ -49,16 +50,18 @@ export function Outline({ editor, currentTemplateId, onGenerateChapter }: Props)
 function TreeRenderer({
   tree,
   onNavigate,
+  generatingChapterId,
   onGenerateChapter,
 }: {
   tree: TreeNode[]
   onNavigate: (pos: number) => void
+  generatingChapterId?: string | null
   onGenerateChapter?: (chapterId: string) => void
 }) {
   return (
     <ul className="space-y-0 text-sm">
       {tree.map(node => (
-        <TreeItem key={node.pos} node={node} onNavigate={onNavigate} onGenerateChapter={onGenerateChapter} />
+        <TreeItem key={node.pos} node={node} onNavigate={onNavigate} generatingChapterId={generatingChapterId} onGenerateChapter={onGenerateChapter} />
       ))}
     </ul>
   )
@@ -67,12 +70,16 @@ function TreeRenderer({
 function TreeItem({
   node,
   onNavigate,
+  generatingChapterId,
   onGenerateChapter,
 }: {
   node: TreeNode
   onNavigate: (pos: number) => void
+  generatingChapterId?: string | null
   onGenerateChapter?: (chapterId: string) => void
 }) {
+  const isGenerating = generatingChapterId === node.chapterId
+
   return (
     <>
       <li>
@@ -90,10 +97,19 @@ function TreeItem({
                 e.stopPropagation()
                 onGenerateChapter(node.chapterId!)
               }}
-              className="p-1 text-gray-500 hover:text-blue-600 flex-shrink-0 transition-colors"
-              title="Generate chapter"
+              disabled={isGenerating}
+              className={`p-1 flex-shrink-0 transition-colors ${
+                isGenerating
+                  ? 'text-blue-600 cursor-wait'
+                  : 'text-gray-500 hover:text-blue-600'
+              }`}
+              title={isGenerating ? 'Generating...' : 'Generate chapter'}
             >
-              <SparklesIcon className="w-4 h-4" />
+              {isGenerating ? (
+                <ArrowPathIcon className="w-4 h-4 animate-spin" />
+              ) : (
+                <SparklesIcon className="w-4 h-4" />
+              )}
             </button>
           )}
         </div>
@@ -101,7 +117,7 @@ function TreeItem({
       {node.children.length > 0 && (
         <ul className="space-y-0">
           {node.children.map(child => (
-            <TreeItem key={child.pos} node={child} onNavigate={onNavigate} onGenerateChapter={onGenerateChapter} />
+            <TreeItem key={child.pos} node={child} onNavigate={onNavigate} generatingChapterId={generatingChapterId} onGenerateChapter={onGenerateChapter} />
           ))}
         </ul>
       )}
