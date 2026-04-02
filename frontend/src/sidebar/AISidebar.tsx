@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { type Editor } from '@tiptap/react'
 import { streamAIAction, ACTION_LABELS, type AIAction } from '../ai'
+import { markdownToHtml } from '../utils/markdownToHtml'
 
 interface Props {
   pendingAction: {
@@ -49,12 +50,13 @@ export function AISidebar({ pendingAction, onClose }: Props) {
 
   const applyResult = () => {
     if (!result?.done) return
+    const html = markdownToHtml(result.output)
     result.editor.chain().focus().insertContentAt(
       {
         from: result.editor.state.selection.from,
         to:   result.editor.state.selection.to,
       },
-      result.output,
+      html,
     ).run()
     setResult(null)
   }
@@ -88,8 +90,8 @@ export function AISidebar({ pendingAction, onClose }: Props) {
                 {result.error}
               </div>
             ) : (
-              <div className="text-sm text-gray-800 whitespace-pre-wrap">
-                {result.output}
+              <div className="text-sm text-gray-800 prose prose-sm max-w-none">
+                <div dangerouslySetInnerHTML={{ __html: markdownToHtml(result.output) }} />
                 {!result.done && <span className="inline-block w-1 h-4 bg-blue-500 animate-pulse ml-0.5 align-text-bottom" />}
               </div>
             )}
