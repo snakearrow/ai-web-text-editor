@@ -18,21 +18,21 @@
       "id": "intro",
       "title": "Introduction",
       "dataSourceId": "webpage",
-      "prompt": "Write an engaging introduction for a blog post based on the provided content. Keep it under 200 words and introduce the main topic.",
+      "prompt": "prompts/blog-post/introduction.md",
       "status": "pending"
     },
     {
       "id": "body",
       "title": "Main Content",
       "dataSourceId": "webpage",
-      "prompt": "Write the main body section of the blog post based on the provided content. Make it informative and well-structured with clear sections. Expand on the key points and findings.",
+      "prompt": "prompts/blog-post/body.md",
       "status": "pending"
     },
     {
       "id": "conclusion",
       "title": "Conclusion",
       "dataSourceId": "webpage",
-      "prompt": "Write a compelling conclusion that summarizes the main points from the provided content and leaves the reader with key takeaways.",
+      "prompt": "prompts/blog-post/conclusion.md",
       "status": "pending"
     }
   ],

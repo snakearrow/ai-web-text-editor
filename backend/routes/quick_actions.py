@@ -5,6 +5,7 @@ import json
 
 from schemas import QuickActionRequest
 from generation import generate_chapter
+from prompts_loader import load_prompt
 
 router = APIRouter()
 

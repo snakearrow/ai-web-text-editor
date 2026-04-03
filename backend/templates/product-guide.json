@@ -18,21 +18,21 @@
       "id": "overview",
       "title": "Product Overview",
       "dataSourceId": "product_data",
-      "prompt": "Write a concise overview of the product, highlighting its key value proposition and target users.",
+      "prompt": "prompts/product-guide/overview.md",
       "status": "pending"
     },
     {
       "id": "features",
       "title": "Key Features",
       "dataSourceId": "product_data",
-      "prompt": "List and explain the key features of the product in an easy-to-understand format with clear descriptions.",
+      "prompt": "prompts/product-guide/features.md",
       "status": "pending"
     },
     {
       "id": "usage",
       "title": "Getting Started",
       "dataSourceId": "product_data",
-      "prompt": "Write step-by-step instructions for getting started with the product, including setup and first use.",
+      "prompt": "prompts/product-guide/usage.md",
       "status": "pending"
     }
   ],
